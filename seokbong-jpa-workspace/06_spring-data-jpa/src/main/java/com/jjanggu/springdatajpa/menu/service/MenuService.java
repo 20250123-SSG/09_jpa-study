@@ -136,4 +136,44 @@ public class MenuService {
 
         menuRepository.delete(menu);
     }
+
+    public List<MenuDto> findMenuByMenuPrice(int price) {
+
+        // 전달된 가격값과 일치하는 메뉴 조회 (WHERE menu_price = xxx)
+        // Native Query + 파라미터 바인딩
+        //List<Menu> menuList = menuRepository.findByMenuPrice(price);
+
+        // * 쿼리메소드
+        List<Menu> menuList
+                //= menuRepository.findByMenuPriceEquals(price);
+                //= menuRepository.findByMenuPriceGreaterThanEqual(price);
+                //= menuRepository.findByMenuPriceGreaterThanEqual(price, Sort.by("menuPrice").descending());
+                = menuRepository.findByMenuPriceGreaterThanEqualOrderByMenuPriceDesc(price);
+
+
+        return menuList.stream()
+                       .map(menu -> modelMapper.map(menu, MenuDto.class))
+                       .toList();
+
+    }
+
+    public List<MenuDto> findMenuByName(String name){
+        // 전달된 메뉴명이 포함된 메뉴
+        List<Menu> menuList
+                = menuRepository.findByMenuNameContaining(name);
+
+        return menuList.stream()
+                .map(menu -> modelMapper.map(menu, MenuDto.class))
+                .toList();
+
+    }
+
+    public List<MenuDto> findMenuByPriceAndName(String[] queryArr) {
+        // 전달된 가격 이상 그리고 메뉴명이 포함되어 있는
+        List<Menu> menuList = menuRepository.findByMenuPriceGreaterThanEqualAndMenuNameContaining(Integer.parseInt(queryArr[0]), queryArr[1]);
+
+        return menuList.stream()
+                .map(menu -> modelMapper.map(menu, MenuDto.class))
+                .toList();
+    }
 }
