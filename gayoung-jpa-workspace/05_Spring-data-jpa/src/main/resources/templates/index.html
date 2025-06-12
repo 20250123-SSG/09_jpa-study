@@ -18,6 +18,10 @@
 
     <a th:href="@{/menu/remove(code=20)}">20번 메뉴 삭제하기</a>
 
+    <a th:href="@{/menu/search(type=price,query=10000)}">가격 검색</a>
+    <a th:href="@{/menu/search(type=name, query=마늘)}">메뉴명 키워드 검색</a>
+    <a th:href="@{/menu/search(type=both, query=10000, query=마늘)}">쿼리가 두개라면?!</a>
+
 
 </body>
 </html>

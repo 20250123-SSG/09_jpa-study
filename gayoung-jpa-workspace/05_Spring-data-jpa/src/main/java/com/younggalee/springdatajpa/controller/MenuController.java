@@ -16,6 +16,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -118,6 +119,23 @@ public class MenuController {
     @GetMapping("/remove")
     public String removeMenu(int menuCode) {
         menuService.removeMenu(menuCode);
+        return "redirect:/";
+    }
+
+    @GetMapping("/search")
+    public String searchMenu(String type, String query, Model model) {//@requestParam 생략됨
+        List<MenuDto> menuList = new ArrayList<>();
+        if("price".equals(type)){ // type이 혹시 null일 수도 있으니까 npe 피하기 위해 비교할 값을 앞에다 적는편
+            menuList = menuService.findMenuByPrice(Integer.parseInt(query));
+            menuList.forEach(System.out::println);
+        } else if ("name".equals(type)){
+            menuList = menuService.findMenuByName(query);
+            menuList.forEach(System.out::println);
+        } else if ("both".equals(type)){ //query = "10000,마늘";
+            menuList = menuService.findMenuByPriceAndName(query.split(",")); // String[] 형태로 전달됨
+            menuList.forEach(System.out::println);
+        }
+
         return "redirect:/";
     }
 }

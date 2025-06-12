@@ -7,12 +7,14 @@ import com.younggalee.springdatajpa.menu.entity.Menu;
 import com.younggalee.springdatajpa.repository.CategoryRepository;
 import com.younggalee.springdatajpa.repository.MenuRepository;
 import com.younggalee.springdatajpa.util.PageUtil;
+import jakarta.persistence.criteria.CriteriaBuilder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -89,7 +91,7 @@ public class MenuService {
         log.info("현재 페이지에 조회된 메뉴 목록: {}", pageAndMenu.getContent());
 
         //페이징바 만들기 위해서 size를 고려한 begin, end페이지는 직접 계산해줘야함. (Util 클래스)
-        Map<String, Object> map = pageUtil.getPageInfo(pageAndMenu,5);
+        Map<String, Object> map = pageUtil.getPageInfo(pageAndMenu, 5);
         map.put("menuList", pageAndMenu.getContent()
                 .stream()
                 .map(menu -> modelMapper.map(menu, MenuDto.class))
@@ -112,6 +114,7 @@ public class MenuService {
         //엔티티객체로 변환후, save : 영속상태되고 쓰기지연 저장됨 이후 commit
         menuRepository.save(modelMapper.map(newMenu, Menu.class));
     }
+
     @Transactional
     public void modifyMenu(MenuDto modifyMenu) {
         // 수정 : 조회 >> setter로 필드변경 >> commit
@@ -128,6 +131,7 @@ public class MenuService {
         //변경감지되면(dirty checking)되면 UPDATE쿼리가 쓰기 짖연 저장소에 저장
         // commit 시점에서 db에 반영
     }
+
     @Transactional
     public void removeMenu(int menuCode) {
 //        menuRepository.deleteById(menuCode); // 바로 삭제시킴 존재하지 않은 경우 확인 불가능
@@ -136,9 +140,33 @@ public class MenuService {
         menuRepository.delete(menu);
 
     }
+
+    public List<MenuDto> findMenuByPrice(int price) {
+
+        // 전달된 가격값과 일치하는 메뉴 조회 (WHERE절)
+        // Native query  + 파라미터
+        List<Menu> menuList = menuRepository.findByMenuPrice(price);
+
+        return menuList.stream().map(menu -> modelMapper.map(menu, MenuDto.class)).toList();
+    }
+
+    public List<MenuDto> findMenuByName(String name) {
+
+        // 쿼리 메소드로 where절 조회하는 방법도 있음
+        // 포함되어있어야하는거지 같다로 조회하니까 안나오지 아오
+        List<Menu> menuList = menuRepository.findByMenuNameContaining(name);
+
+        return menuList.stream().map(menu -> modelMapper.map(menu, MenuDto.class)).toList();
+    }
+
+    public List<MenuDto> findMenuByPriceAndName(String[] quaryList) {
+        // 가격 이상, 메뉴명 포함되어있는
+
+        List<Menu> menuList = menuRepository.findByMenuPriceGreaterThanEqualAndMenuNameContaining(Integer.parseInt(quaryList[0]), quaryList[1]);
+
+        return menuList.stream().map(menu -> modelMapper.map(menu, MenuDto.class)).toList();
+    }
 }
-
-
 
 
 

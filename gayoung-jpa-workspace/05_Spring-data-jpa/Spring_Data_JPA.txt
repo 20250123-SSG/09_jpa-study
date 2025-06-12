@@ -29,14 +29,15 @@
     2) Or               | findByCodeOrName            | WHERE m.code = ?1 OR m.name = ?2
     3) Not              | findByNameNot               | WHERE m.name <> ?1
     4) Between          | findByPriceBetween          | WHERE m.price BETWEEN 1? AND ?2
+    *  Equal            | findByPriceEquals           | WHERE m.price = ?1
     5) LessThan         | findByPriceLessThan         | WHERE m.price < ?1
     6) LessThanEqual    | findByPriceLessThanEqual    | WHERE m.price < ?1
     7) GreaterThan      | findByPriceGreaterThan      | WHERE m.price > ?1
     8) GreaterThanEqual | findByPriceGreaterThanEqual | WHERE m.price >= ?1
-    9) IsNull           | findByNameIsNull            | WHERE m.name IS NULL
-   10) (Is)NotNull      | findByNameIsNotNull         | WHERE m.name IS NOT NULL
+   * 9) IsNull           | findByNameIsNull            | WHERE m.name IS NULL
+   * 10) (Is)NotNull      | findByNameIsNotNull         | WHERE m.name IS NOT NULL
    11) Like             | findByNameLike              | WHERE m.name LIKE ?1
    12) StartingWith     | findByNameStartingWith      | WHERE m.name LIKE ?1 || '%'
    13) EndingWith       | findByNameEndingWith        | WHERE m.name LIKE '%' || ?1
-   14) Containing       | findByNameContaining        | WHERE m.name LIKE '%' || ?1 || '%'
-   15) OrderBy          | findByNameOrderByCodeDesc   | WHERE m.name = ?1 ORDER BY m.code DESC
+   * 14) Containing       | findByNameContaining        | WHERE m.name LIKE '%' || ?1 || '%'
+   * 15) OrderBy          | findByNameOrderByCodeDesc   | WHERE m.name = ?1 ORDER BY m.code DESC
