@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -58,7 +59,7 @@ public class MenuService {
     }
 
     public List<CategoryDto> findCategoryList() {
-        List<Category> categoryList = categoryRepository.findAllSubCategory();
+        List<Category> categoryList = categoryRepository.findByRefCategoryCodeIsNotNullOrderByCategoryCodeDesc();
 
         // List<Category> List<catedto>
         List<CategoryDto> categoryDtoList = categoryList.stream().map(category -> {
@@ -91,5 +92,31 @@ public class MenuService {
                 .orElseThrow(() -> new IllegalArgumentException("wrong menu number"));
         menuRepository.delete(foundedMenu);
         // menuRepository.deleteById(code); 곧장 삭제, 존재하지 않을 경우 예외 컨트롤을 위해 상기 방법 이용
+    }
+
+    public List<MenuDto> findMenuByMenuPrice(int price) {
+
+        // 전달된 가격값과 일치하는 메뉴 조회 (WHERE menu_price = xxx)
+        // Native Query + 파라미터 바인딩
+        List<Menu> menuList = menuRepository.findMenuByMenuPriceGreaterThanEqual(price, Sort.by("menuCode"));
+        return menuList.stream().map(menu -> {
+            return modelMapper.map(menu, MenuDto.class);
+        }).toList();
+    }
+
+    public List<MenuDto> findMenuByMenuName(String name) {
+        List<Menu> menuList = menuRepository.findMenuByMenuNameContaining(name);
+        return menuList.stream().map(menu -> {
+            return modelMapper.map(menu, MenuDto.class);
+        }).toList();
+    }
+
+    public List<MenuDto> findMenuByPriceAndName(String[] split) {
+        int price = Integer.parseInt(split[0]);
+        String name = split[1];
+        List<Menu> menuList = menuRepository.findMenuByMenuPriceGreaterThanAndMenuNameContaining(price, name);
+        return menuList.stream().map(menu -> {
+            return modelMapper.map(menu, MenuDto.class);
+        }).toList();
     }
 }

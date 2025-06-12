@@ -13,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -20,7 +21,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 @Slf4j
 @RequestMapping("/menu")
-public class MenuController {
+public class  MenuController {
 
     private final MenuService menuService;
 
@@ -94,6 +95,25 @@ public class MenuController {
     @GetMapping("/remove")
     public String removeMenu(int code){
         menuService.removeMenu(code);
+        return "redirect:/";
+    }
+
+    @GetMapping("/search")
+    public String search(String type, String query){
+
+        List<MenuDto> menuDtoList = new ArrayList<>();
+        if("price".equals(type)){ // type == null 의 경우 NPE 방지 위해
+            menuDtoList = menuService.findMenuByMenuPrice(Integer.parseInt(query));
+        }else if("name".equals(type)){
+            menuDtoList = menuService.findMenuByMenuName(query);
+
+        }else if("both".equals(type)){
+
+            menuDtoList = menuService.findMenuByPriceAndName(query.split(","));
+        }
+
+        menuDtoList.forEach(System.out::println);
+
         return "redirect:/";
     }
 }
