@@ -12,4 +12,5 @@ public interface CategoryRepository extends JpaRepository<Category, Integer> {
             , nativeQuery = true)
     List<Category> findAllSubCategory();
 
+
 }
