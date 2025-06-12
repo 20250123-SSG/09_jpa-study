@@ -5,10 +5,14 @@
   <title>Title</title>
 </head>
 <body>
-<a th:href="@{/menu/7}">7th menu detail view</a> <!-- /menu/detail.html 이동 -->
-<a th:href="@{/menu/list}">all menu list</a>
-<a th:href="@{/menu/regist}">regist menu</a>
-<a th:href="@{/menu/modify(code=7)}">modify menu</a>
-<a th:href="@{/menu/remove(code=20)}">delete menu</a>
+<a th:href="@{/menu/7}">7th menu detail view</a><br> <!-- /menu/detail.html 이동 -->
+<a th:href="@{/menu/list}">all menu list</a><br>
+<a th:href="@{/menu/regist}">regist menu</a><br>
+<a th:href="@{/menu/modify(code=7)}">modify menu</a><br>
+<a th:href="@{/menu/remove(code=20)}">delete menu</a><br>
+<a th:href="@{/menu/search(type=price,query=10000)}">search price</a><br>
+<a th:href="@{/menu/search(type=name,query=마늘)}">search menuName keyword</a><br>
+<a th:href="@{/menu/search(type=both,query=10000, query=마늘)}">search both keyword</a><br>
+
 </body>
 </html>

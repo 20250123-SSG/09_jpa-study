@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+<h1>Naver Clova OCR</h1>
+
+<form id="ocr_form">
+  <select name="type">
+    <option value="general">general</option>
+    <option value="template">template</option>
+  </select>
+  <input type="file" name="file" accept="image/*" required>
+  <input type="button" value="upload" id="ocr_btn">
+</form>
+
+<h2>OCR Result</h2>
+<div id="result">before req</div>
+<script>
+  document.getElementById("ocr_btn").addEventListener('click', e => {
+    // multipart/form-data async req
+    // formData.append('type', select요소 option값)
+    // formData.append('file', 파일객체)
+    let formData = new FormData(document.getElementById('ocr_form')); // 자동으로 타입이나 파일 추가됨
+
+    fetch('[[@{/upload}]]', {
+      method: 'POST',
+      body: formData
+    })
+  })
+</script>
+</body>
+</html>
