@@ -29,6 +29,23 @@
       method: 'POST',
       body: formData
     })
+      .then(response => response.json())
+      .then(data => {
+        const {message, result} = data;
+        alert(message);
+        // JSON.parse(result).images[0].fields => 배열
+        const ocrResult = JSON.parse(result).images[0].fields;
+        // general OCR
+        if(formData.get('type') === 'general') {
+          document.getElementById('result').innerHTML
+            = ocrResult.map(obj => `<p>${obj.inferText}</p>`).join('');
+        }else{
+          document.getElementById('result').innerHTML
+            = '<table border="1">'
+              +  ocrResult.map(obj => `<tr><th>${obj.name}</th><td>${obj.inferText}</td></tr>`).join('');
+              + '</table>'
+        }
+      })
   })
 </script>
 </body>

@@ -9,10 +9,9 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.UUID;
+import java.util.*;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -31,7 +30,7 @@ public class OCRUtil {
     @Value("${ncp.clova-ocr.template.secretKey}")
     private String TEMPLATE_OCR_SECRET_KEY;
 
-    public void processOCR(String type, String imageFile) {
+    public String processOCR(String type, String imageFile) {
         try {
             URL url;
             if ("general".equals(type)) {
@@ -56,25 +55,36 @@ public class OCRUtil {
             } else {
                 throw new IllegalArgumentException("type value is not formatted");
             }
-            JSONObject json = new JSONObject();
-            json.put("version", "V2");
-            json.put("requestId", UUID.randomUUID().toString());
-            json.put("timestamp", System.currentTimeMillis());
-            JSONObject image = new JSONObject();
-            image.put("format", "jpg");
-            image.put("name", "demo");
-            JSONArray images = new JSONArray();
-            images.put(image);
-            json.put("images", images);
-            String postParams = json.toString();
+            // JSON 방식으로 JSON 문자열화 시키는거 => Jackson 방식으로
+            Map<String, Object> jsonMap = new HashMap<>();
+            jsonMap.put("version", "V2");
+            jsonMap.put("requestId", UUID.randomUUID().toString());
+            jsonMap.put("timestamp", System.currentTimeMillis());
+
+            Map<String, Object> imageMap = new HashMap<>();
+            imageMap.put("format", "jpg");
+            imageMap.put("name", "demo");
+
+            List<Map<String, Object>> imagesList = new ArrayList<>();
+            imagesList.add(imageMap);
+
+            jsonMap.put("images", imagesList); // { vesion:V2, requestId:xxx, timestamp:xxx, .., images:[] }
+
+            //          Jackson(ObjectMapper)
+            // Java 객체(Map) =====> JSON 문자열 변환
+            ObjectMapper objectMapper = new ObjectMapper();
+            String postParams = objectMapper.writeValueAsString(jsonMap); // '{ "vesion":"V2", "requestId":"xxx", timestamp:xxx, .., images:[] }
 
             con.connect();
             DataOutputStream wr = new DataOutputStream(con.getOutputStream());
             long start = System.currentTimeMillis();
             File file = new File(imageFile);
+            // multipart/form-data 형태의 요청 메세지 작성
             writeMultiPart(wr, postParams, file, boundary);
             wr.close();
+            // --------------
 
+            // 2. response
             int responseCode = con.getResponseCode();
             BufferedReader br;
             if (responseCode == 200) {
@@ -82,6 +92,7 @@ public class OCRUtil {
             } else {
                 br = new BufferedReader(new InputStreamReader(con.getErrorStream()));
             }
+            // read response(one line)
             String inputLine;
             StringBuffer response = new StringBuffer();
             while ((inputLine = br.readLine()) != null) {
@@ -89,10 +100,11 @@ public class OCRUtil {
             }
             br.close();
 
-            System.out.println(response);
+            return response.toString();
         } catch (Exception e) {
             System.out.println(e);
         }
+        return null;
     }
 
     private static void writeMultiPart(OutputStream out, String jsonMessage, File file, String boundary) throws
@@ -116,13 +128,14 @@ public class OCRUtil {
             out.write(fileString.toString().getBytes("UTF-8"));
             out.flush();
 
+            // file -> binary data
             try (FileInputStream fis = new FileInputStream(file)) {
                 byte[] buffer = new byte[8192];
                 int count;
                 while ((count = fis.read(buffer)) != -1) {
                     out.write(buffer, 0, count);
                 }
-                out.write("\r\n".getBytes());
+                out.write("\r\n".getBytes()); // boundary 3
             }
 
             out.write(("--" + boundary + "--\r\n").getBytes("UTF-8"));
