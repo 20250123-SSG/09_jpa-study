@@ -30,10 +30,27 @@ import java.util.Date;
         name = "tbl_user",
         uniqueConstraints = {@UniqueConstraint(columnNames = {"phone", "enroll_date"})}
 )
+@TableGenerator(
+        name = "user_seq_table_generator",
+        table = "userno_seq",
+        pkColumnName = "sequence_name",
+        pkColumnValue = "user_seq",
+        valueColumnName = "next_val",
+        initialValue = 0,
+        allocationSize = 1
+)
 public class User {
+
     @Id
+    @GeneratedValue(
+            //strategy = GenerationType.IDENTITY // 기본키 생성을 데이터베이스에게 위임  (MySQL에서 Auto Increment)
+            //strategy = GenerationType.AUTO
+            strategy = GenerationType.TABLE,
+            generator = "user_seq_table_generator"
+    )
     @Column(name = "user_no")
     private int userNo;
+
     @Column(name = "user_id", nullable = false)
     private String userId;
     @Column(name = "user_pwd", nullable = false)
@@ -59,6 +76,7 @@ public class User {
 
     @Column(name = "user_role")
     private String userRole;
+
     @Column(name = "status", length = 1)
     private String status;
 }

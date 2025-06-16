@@ -8,7 +8,9 @@
 <!--    <class>com.jjanggu.section01.Test1</class>-->
 <!--    <class>com.jjanggu.section01.Test2</class>-->
 <!--    <class>com.jjanggu.section01.Test3</class>-->
-    <class>com.jjanggu.section02.User</class>
+
+<!--    <class>com.jjanggu.section02.User</class>-->
+    <class>com.jjanggu.section03.User</class>
 
     <properties>
       <!-- Database connection settings -->

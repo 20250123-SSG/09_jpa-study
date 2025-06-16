@@ -1,0 +1,39 @@
+## JPQL ##
+1. Java Persistence Query Language
+2. 엔티티(객체)를 중심으로 쿼리 작성을 위한 객체 지향 쿼리문
+3. SQL보다 간결하며 특정 DBMS에 종속적이지 않음 (즉, 여러 DB에 동일하게 사용 가능)
+4. SQL과 유사한 문법이나 엔티티명(+별칭)과 (별칭+)필드명을 사용하여 JPQL 구문 작성
+    → JPA가 JPQL을 분석해 SQL로 변환 후 실제 DB에 실행함
+6. SELECT, UPDATE, DELETE 쿼리 지원
+   단, INSERT는 지원하지 않음 → EntityManager의 persist()를 사용해야됨
+7. find() 메소드를 통한 조회와 다르게 항상 DB로부터 조회함
+8. JPQL로 조회된 엔티티는 영속 컨텍스트에 저장됨
+
+
+## JPQL 작성 및 실행 순서 ##
+1. JPQL 문자열 작성 (SELECT 별칭.필드 FROM 엔티티 별칭)
+2. 작성된 JPQL 문자열을 EntityManager 의 createQuery() 메소드에 전달
+   1) TypedQuery : 반환할 타입을 명확하게 지정할 때 사용
+   2) Query      : 반환할 타입을 명시하지 않음. 반환 타입은 Object 또는 Object[]로 되어있음
+3. 쿼리 객체(TypedQuery, Query)가 제공하는 getSingleResult() 또는 getResultList() 메소드를 호출해서 쿼리를 실행
+   1) getSingleResult() : 결과 행이 1개일 때 사용. 결과가 없거나 2개 이상이면 예외가 발생
+   2) getResultList()   : 결과 행이 2개 이상일 때 사용. 결과가 없으면 비어 있는 컬렉션을 반환
+
+
+## 프로젝션 (Projection) ##
+1. SELECT 절에서 조회할 대상을 지정하는 걸 의미함
+   SELECT { 프로젝션 대상 } FROM
+2. 종류
+   1) 엔티티 프로젝션
+       → 엔티티를 조회하는 방식
+       → 조회된 엔티티는 영속 컨텍스트에 저장됨
+   2) 스칼라 타입 프로젝션
+       → 기본 데이터(숫자, 문자, 날짜 등)를 조회하는 방식
+       → 조회된 스칼라 데이터는 영속 컨텍스트에 저장되지 않음
+   3) 임베디드 타입 프로젝션
+       → @Embeddable 을 이용해 포함한 객체를 조회하는 방식
+       → 조회된 임베디드 타입은 영속 컨텍스트에 저장되지 않음
+       → 임베디드 타입은 FROM 절에서 사용할 수 없음
+   4) new 생성 프로젝션
+       → 다양한 값을 저장한 DTO 방식으로 조회하는 방식
+       → new 를 이용해 객체를 생성하기 때문에 영속 컨텍스트에 저장되지 않음

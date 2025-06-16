@@ -9,7 +9,8 @@
 <!--    <class>com.kyungbae.section01.test1</class>-->
 <!--    <class>com.kyungbae.section01.test2</class>-->
 <!--    <class>com.kyungbae.section01.test3</class>-->
-    <class>com.kyungbae.section02.User</class>
+<!--    <class>com.kyungbae.section02.User</class>-->
+    <class>com.kyungbae.section03.User</class>
 
     <properties>
       <!-- Database connection settings -->

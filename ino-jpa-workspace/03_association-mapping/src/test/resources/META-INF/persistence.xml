@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<persistence xmlns="http://java.sun.com/xml/ns/persistence"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd"
+             version="2.0">
+
+  <persistence-unit name="jpa_test">
+    <class>com.ino.section01.many_to_one.Category</class>
+    <class>com.ino.section01.many_to_one.Menu</class>
+    <class>com.ino.section02.one_to_many.Category</class>
+    <class>com.ino.section02.one_to_many.Menu</class>
+    <class>com.ino.section03.bidirection.Category</class>
+    <class>com.ino.section03.bidirection.Menu</class>
+    <properties>
+      <!-- Database connection settings -->
+      <property name="jakarta.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
+      <property name="jakarta.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/menudb"/>
+      <property name="jakarta.persistence.jdbc.user" value="ino"/>
+      <property name="jakarta.persistence.jdbc.password" value="ino"/>
+
+      <!-- Echo all executed SQL to console -->
+      <property name="hibernate.show_sql" value="true"/>
+      <property name="hibernate.format_sql" value="true"/>
+
+    </properties>
+  </persistence-unit>
+<persistence-unit name="jpa-practice">
+  <class>com.ino.section04.practice.Member</class>
+  <class>com.ino.section04.practice.Locker</class>
+  <class>com.ino.section04.practice.Team</class>
+
+  <properties>
+    <!-- Database connection settings -->
+    <property name="jakarta.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
+    <property name="jakarta.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/menudb"/>
+    <property name="jakarta.persistence.jdbc.user" value="ino"/>
+    <property name="jakarta.persistence.jdbc.password" value="ino"/>
+
+    <!-- Echo all executed SQL to console -->
+    <property name="hibernate.show_sql" value="true"/>
+    <property name="hibernate.format_sql" value="true"/>
+    <property name="hibernate.hbm2ddl.auto" value="create"/>
+  </properties>
+</persistence-unit>
+</persistence>

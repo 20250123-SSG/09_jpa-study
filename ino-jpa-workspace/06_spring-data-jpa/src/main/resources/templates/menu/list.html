@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+<table border="1">
+  <thead>
+  <tr>
+    <th>번호</th>
+    <th>메뉴명</th>
+    <th>메뉴가격</th>
+    <th>주문가능여부</th>
+    <th>카테고리코드</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr th:each="menu : ${menu}" th:object="${menu}">
+      <td th:text="|메뉴코드 : *{menuCode}|"></td>
+      <td th:text="|메뉴명 : *{menuName}|"></td>
+      <td th:text="|메뉴 가격 : *{menuPrice}|"></td>
+      <td th:text="|주문 가능 여부 : *{orderableStatus}|"></td>
+      <td th:text="|카테고리 코드 : *{categoryCode}|"></td>
+  </tr>
+  </tbody>
+</table>
+<div>
+  <button th:disabled="${isFirst}" th:onclick="|location.href='@{/menu/list(page=${page-1})}';|">prev</button>
+  <button th:each="p : ${#numbers.sequence(beginPage, endPage)}"
+          th:text="${p}"
+          th:onclick="|location.href='@{/menu/list(page=${p})}';|"
+          th:disabled="${p eq page}"></button>
+  <button th:disabled="${isLast}" th:onclick="|location.href='@{/menu/list(page=${page+1})}';|">next</button>
+</div>
+</body>
+</html>

@@ -1,0 +1,29 @@
+package com.younggalee.section03.bidirection;
+
+import jakarta.persistence.*;
+import lombok.*;
+import java.util.List;
+
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
+@ToString
+@Builder
+
+@Entity(name = "category3")
+@Table(name = "tbl_category")
+public class Category {  // 1
+
+    @Id
+    @Column(name = "category_code")
+    private int categoryCode;
+    @Column(name = "category_name")
+    private String categoryName;
+    @Column(name = "ref_category_code")
+    private Integer refCategoryCode;
+
+    @OneToMany(mappedBy = "Category") //menu엔티티의 category에 연결되어있다(하위)
+    private List<Menu> menuList;
+}
+

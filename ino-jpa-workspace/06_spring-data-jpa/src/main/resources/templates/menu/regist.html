@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+<h2>regist new menu</h2>
+<form th:action="@{/menu/regist}" method="post">
+  menuName : <input type="text" name="menuName"> <br>
+  menuPrice : <input type="number" name="menuPrice"> <br>
+  category :
+  <select name="categoryCode" id="categorySelectBox">
+    <!-- category list data -->
+  </select>
+  orderStatus
+  <select name="orderableStatus">
+    <option value="Y">sellable</option>
+    <option value="N">unsellable</option>
+  </select>
+  <button type="submit">submit</button>
+</form>
+<script>
+  // find category list
+  fetch('[[@{/menu/categories}]]') // js 내 타임리프 표현식 이용 위해, 비동기식 요청시 자원중심 표기
+  .then(response => response.json())
+  .then(data => {
+    console.log(data);
+    const $categorySelect = document.getElementById("categorySelectBox");
+
+    data.forEach(category => {
+      const $option = document.createElement('option'); // <option></option> 생성
+      $option.textContent = category.categoryName; // <option>카테고리명</option>
+      $option.value = category.categoryCode; // <option value="카테고리번호">카테고리명</option>
+      $categorySelect.appendChild($option);
+    })
+  })
+</script>
+</body>
+</html>

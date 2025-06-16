@@ -29,8 +29,22 @@ import java.util.Date;
 @Table(
         name = "tbl_user"
         ,uniqueConstraints = {@UniqueConstraint(columnNames = {"phone", "enroll_date"})} )
+@TableGenerator(
+        name = "user_seq_table_generator",
+        table="userno_seq",
+        pkColumnName = "sequence_name",
+        pkColumnValue = "user_seq",
+        valueColumnName = "next_val",
+        initialValue = 0,
+        allocationSize = 1
+)
 public class User {
     @Id
+    @GeneratedValue( // 기본키(PK)값을 자동생성해주는 어노테이션
+            //strategy = GenerationType.IDENTITY    // 기본키 생성을 데이터베이스에게 위임 (auto increment)
+            //strategy = GenerationType.AUTO
+            strategy = GenerationType.TABLE, generator = "user_seq_table_generator"
+    )
     @Column(name = "user_no")
     private int userNo;
     @Column(name="user_id", nullable = false) // not null 제약조건

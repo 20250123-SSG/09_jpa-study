@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+    <table border="1">
+        <thead>
+            <tr>
+                <th>메뉴번호</th>
+                <th>메뉴이름</th>
+                <th>메뉴가격</th>
+                <th>카테고리코드</th>
+                <th>판매상태</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="menu : ${menuList}"
+                th:object="${menu}">
+                <td th:text="*{menuCode}"></td>
+                <td th:text="*{menuName}"></td>
+                <td th:text="*{menuPrice}"></td>
+                <td th:text="*{categoryCode}"></td>
+                <td th:text="*{orderableStatus}"></td>
+            </tr>
+        </tbody>
+    </table>
+
+</body>
+</html>

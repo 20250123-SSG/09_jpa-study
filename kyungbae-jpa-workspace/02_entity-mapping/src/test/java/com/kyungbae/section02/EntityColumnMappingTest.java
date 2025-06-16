@@ -36,13 +36,27 @@ public class EntityColumnMappingTest {
 
     @Test
     public void 컬럼매핑테스트(){
-        User user = User.builder()
-                .userNo(1)
+        User user1 = User.builder()
+//                .userNo(1)
                 .userId("user01")
                 .userPwd("1234")
                 .nickname("관리자")
+                .phone("010-2020-1313")
+                .address("경기도 구리시")
                 .email("mail@email.com")
                 .userRole("ADMIN")
+                .enrollDate(new Date())
+                .status("Y")
+                .build();
+
+        User user2 = User.builder()
+                .userId("user02")
+                .userPwd("4321")
+                .nickname("사용자")
+                .phone("010-3232-1212")
+                .address("서울시 강동구")
+                .email("mailmail@email.com")
+                .userRole("USER")
                 .enrollDate(new Date())
                 .status("Y")
                 .build();
@@ -52,7 +66,8 @@ public class EntityColumnMappingTest {
 
 
         try {
-            entityManager.persist(user);
+            entityManager.persist(user1);
+            entityManager.persist(user2);
             transaction.commit();
         } catch (Exception e) {
             e.printStackTrace();

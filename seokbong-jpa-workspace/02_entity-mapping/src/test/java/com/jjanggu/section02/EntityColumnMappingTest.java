@@ -29,15 +29,30 @@ public class EntityColumnMappingTest {
     @Test
     public void 컬럼_매핑_테스트(){
         User user = User.builder()
-                .userNo(1)
+                //.userNo(1)
                 .userId("admin01")
                 .userPwd("1234")
                 .nickname("관리자")
                 .phone("010-1234-5678")
-                .email("서울시 강서구")
+                .email("admin@gmail.com")
+                .address("서울시 강서구")
                 //.enrollDate(new Date())
                 .enrollDate(LocalDateTime.now())
                 .userRole("ADMIN")
+                .status("Y")
+                .build();
+
+        User user2 = User.builder()
+                //.userNo(1)
+                .userId("user01")
+                .userPwd("pass01")
+                .nickname("사용자")
+                .phone("010-9999-1111")
+                .email("user@gmail.com")
+                .address("부산시 강서구")
+                //.enrollDate(new Date())
+                .enrollDate(LocalDateTime.now())
+                .userRole("USER")
                 .status("Y")
                 .build();
 
@@ -46,10 +61,12 @@ public class EntityColumnMappingTest {
 
         try {
             entityManager.persist(user);
+            entityManager.persist(user2);
             entityTransaction.commit();
         }catch (Exception e){
             e.printStackTrace();
             entityTransaction.rollback();
         }
+
     }
 }

@@ -7,7 +7,7 @@
     <persistence-unit name="jpa_test">
 
 <!--        <class>com.younggalee.section01.Test1</class>-->
-        <class>com.younggalee.section02.User</class>
+        <class>com.younggalee.section03.User</class>
 <!--        <class>com.younggalee.section01.Test2</class>-->
 
         <properties>
